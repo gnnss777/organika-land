@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,900;1,900&family=Space+Mono&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg: #F0EDE6;
+  --bg-dark: #141410;
+  --green: #2E5E3A;
+  --green-neon: #4AFF7A;
+  --muted: #8A8A7A;
+  --text: #141410;
+}
+
+body {
+  background: #F0EDE6;
+  color: #141410;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-space {
+  font-family: 'Space Mono', monospace;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0EDE6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2E5E3A;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4AFF7A;
+}
