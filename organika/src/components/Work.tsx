@@ -1,7 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   { id: "01", title: "Terra Ausente", category: "DOC", year: "2025", description: "Documentário sobre a vida no campo.", color: "#FF6B6B" },
@@ -32,6 +36,7 @@ function createFibonacciBlob(phase: number = 0, scale: number = 1) {
 
 export default function Work() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLSpanElement>(null);
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
@@ -39,6 +44,26 @@ export default function Work() {
     target: containerRef,
     offset: ["start end", "end start"],
   });
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        titleRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const positions = [
     { x: -280, y: -100 },

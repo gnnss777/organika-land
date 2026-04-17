@@ -1,8 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Team() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        titleRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
   return (
     <section className="relative w-full bg-[#F0EDE6] py-24 overflow-hidden">
       <div className="w-full max-w-5xl mx-auto px-8 md:px-20">
@@ -10,7 +37,7 @@ export default function Team() {
           <span className="font-bebas text-xs tracking-[8px] text-[#2E5E3A] block mb-4">
             _timeira
           </span>
-          <h2 className="font-playfair text-[48px] md:text-[80px] text-[#141410]">
+          <h2 ref={titleRef} className="font-playfair text-[48px] md:text-[80px] text-[#141410]">
             OS ARTESÃOS
           </h2>
         </div>

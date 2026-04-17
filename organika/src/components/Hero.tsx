@@ -1,10 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import { useScroll, useTransform, motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function OrganicShape({ position }: { position: [number, number, number] }) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -28,6 +32,9 @@ function OrganicShape({ position }: { position: [number, number, number] }) {
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -35,6 +42,41 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -40]);
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      
+      tl.from(labelRef.current, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+      })
+      .from(titleRef.current, {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+      }, "-=0.4")
+      .from(subtitleRef.current, {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+      }, "-=0.6");
+
+      gsap.to(titleRef.current, {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,
+        },
+        y: -50,
+        opacity: 0,
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-[#F0EDE6]">
@@ -59,15 +101,15 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-center px-6"
         >
-          <span className="font-bebas text-xs tracking-[10px] text-[#2E5E3A] mb-4 block">
+          <span ref={labelRef} className="font-bebas text-xs tracking-[10px] text-[#2E5E3A] mb-4 block">
             PÓS-PRODUÇÃO CINEMATOGRÁFICA
           </span>
           
-          <h1 className="font-playfair text-[64px] md:text-[100px] lg:text-[140px] text-[#141410] leading-[0.95] mb-4">
+          <h1 ref={titleRef} className="font-playfair text-[64px] md:text-[100px] lg:text-[140px] text-[#141410] leading-[0.95] mb-4">
             ORGANIKA
           </h1>
           
-          <p className="font-space text-base text-[#2E5E3A]">
+          <p ref={subtitleRef} className="font-space text-base text-[#2E5E3A]">
             Craft orgânico. Cinema de verdade.
           </p>
         </motion.div>

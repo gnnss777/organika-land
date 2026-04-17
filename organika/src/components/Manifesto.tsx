@@ -1,10 +1,46 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Manifesto() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const linesRef = useRef<HTMLDivElement[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      linesRef.current.forEach((line, index) => {
+        gsap.fromTo(
+          line,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: line,
+              start: "top 85%",
+              end: "top 50%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const addToRefs = (el: HTMLDivElement | null) => {
+    if (el && !linesRef.current.includes(el)) {
+      linesRef.current.push(el);
+    }
+  };
 
   return (
     <section 
@@ -31,18 +67,15 @@ export default function Manifesto() {
             { text: "de quem acredita", size: "text-2xl md:text-3xl text-[#8A8A7A]" },
             { text: "que o cinema é um ato de alma.", size: "text-3xl md:text-5xl" },
           ].map((line, index) => (
-            <motion.div
+            <div
               key={index}
+              ref={addToRefs}
               className={`font-playfair text-[#F0EDE6] ${line.size} ${
                 line.highlight ? "text-[#2E5E3A]" : ""
               }`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.12 }}
-              viewport={{ once: true }}
             >
               {line.text}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
