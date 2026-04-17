@@ -1,0 +1,4 @@
+{
+  "buildCommand": "cd organika && npm run build",
+  "outputDirectory": "organika/out"
+}
