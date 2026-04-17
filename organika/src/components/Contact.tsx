@@ -67,7 +67,7 @@ export default function Contact() {
           <a className="font-space text-sm text-[#8A8A7A] hover:text-[#2E5E3A] transition-colors">
             contato@organika.studio
           </a>
-        </motion.div>
+        </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 border-t border-[#2E5E3A]/20">

@@ -2,8 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "gsap";
 
 gsap.registerPlugin(ScrollTrigger);
 
